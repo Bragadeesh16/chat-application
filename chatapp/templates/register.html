@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block stylesheet%}
+<link rel="stylesheet" href="{% static 'register.css' %}">
+ {% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <h4>Register</h4>
+    <form action="{% url 'register' %}" method="post">
+        {% csrf_token %}
+        {{ form }}
+        <button>register</button>
+    </form>
+
+    <p>I already have a account <a href="{% url 'login' %}">Login</a></p>
+
+    <h4><a href="{% url 'social:begin' 'google-oauth2' %}">Google</a></h4>
+</div>
+
+{% endblock %}

@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h3>Notification:</h3>
+    {% csrf_token %}
+        {% if friend_requests %}
+            {% for requests in friend_requests %}
+                {{ requests.sender }}
+                <button class="confirm-request" data-id="{{ requests.sender.id }}" data-value="confirm">confirm</button>
+                <button class="cancel-request" data-id="{{ requests.sender.id }}" data-value="cancel">cancel request</button>
+            {% endfor %}
+        {% endif %}
+{% endblock %}
+
+{% block javascript %}
+<script>
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    const csrftoken = getCookie('csrftoken');
+    async function postJSON(data) {
+        const url = "{% url 'adding-friend' %}";
+        try {
+            const response = await fetch(url, {
+                method: "POST",
+                headers: {
+                    'X-CSRFToken': csrftoken,
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(data),
+            });
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(`Network response was not ok: ${errorText}`);
+            }
+
+            const result = await response.json();
+            console.log("Success:", result);
+
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+    const confirmBtns = document.querySelector('.confirm-request');
+    const cancelBtns = document.querySelector('.cancel-request');
+    if (confirmBtns) {
+        confirmBtns.addEventListener('click', function(e) {
+            const data = {id: e.target.dataset.id,value:e.target.dataset.value };
+            console.log(data)
+            postJSON(data);
+            console.log('hello');
+        });
+    }
+
+    if (cancelBtns) {   
+        cancelBtns.addEventListener('click', function(e) {
+            const data = { id: e.target.dataset.id, value:e.target.dataset.value};
+            console.log(data)
+            postJSON(data);
+            console.log('hello')
+        });;
+    }
+});
+
+</script>
+
+{% endblock %}

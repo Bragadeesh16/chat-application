@@ -1,0 +1,32 @@
+{% extends 'base.html'%}
+{% load static %}
+
+{% block stylesheet%}
+<link rel="stylesheet" href="{% static 'home.css' %}">
+ {% endblock %}
+
+{% block content %}
+<header class="header">
+    <h5 class="username">{{ request.user.username }}</h5>
+    <div class="icon-header-elements">
+        <a href="{% url 'search_user' %}">
+            <img src="{% static 'icons/add-user.png' %}" alt="" height="40px" width="40px">
+        </a>
+        <a href="{% url 'notifications' %}">
+            <img src="{% static 'icons/notification.png' %}" alt="" height="40px" width="40px">
+        </a>
+        <a href="{% url 'update-profile' request.user.id %}">
+            <img src="{% static 'icons/setting.png' %}" alt="" height="40px" width="40px">
+        </a>
+    </div>
+</header>
+
+<div class="friend-list-container">
+    {% for friends in friendlist %}
+        <div class="friend-list-div">
+            <a href="{% url 'personal-chat' friends.id %}"> {{ friends.username }}</a>
+        </div>
+    {% endfor %}
+</div>
+
+{% endblock %}

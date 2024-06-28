@@ -1,0 +1,22 @@
+{% extends 'base.html'%}
+
+{% block content %}
+
+<form action="{% url 'search_user' %}" method="post">
+    {% csrf_token %}
+    {{ form }}
+    <button>search</button>
+</form>
+
+
+{% if profile_user %}
+    {% for user in profile_user %}
+        <a href="{% url 'user-profile' user.id %}">Username: {{ user.username }}</a>
+    {% endfor %}
+{% else %}
+    {% for message in messages %}
+        <p>{{ message }}</p>
+    {% endfor %}
+{% endif %}
+
+{% endblock %}

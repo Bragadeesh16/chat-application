@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h5>username:  {{ searchuser.username }}</h5>
+<h5>bio: {{ receiverdetails.bio }}</h5>
+<h5>Gender: {{ receiverdetails.gender }}</h5>
+
+
+{%if searchuser.id == request.user.id %}
+<a href="{% url 'update-profile' request.user.id %}">edit profile </a>
+{% elif searchuser in myprofiledetail.friends.all %}
+<a href="{% url 'personal-chat' searchuser.id %}">message</a>
+{% else %}
+    {% if friend_exists %}
+        <div>
+            <button class="cancel-request" data-id ="{{searchuser.id}}" data-value ="cancel" >cancel request</button>
+        </div>
+    {% else %}
+        <div>
+            <div class="add-friend" data-id ="{{searchuser.id}}" data-value ="add-friend" style="color: blue;">add friend</div>
+        </div>
+    {% endif %}
+
+{% endif %}
+{% endblock %}
+
+{% block javascript %}
+<script>
+    const friendExists = '{{friend_exists}}';
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    const csrftoken = getCookie('csrftoken');
+    
+    async function postJSON(data) {
+        const url = "{% url 'send-request' %}";
+        try {
+            const response = await fetch(url, {
+                method: "POST",
+                headers: {
+                    'X-CSRFToken': csrftoken,
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(data),
+            });
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(`Network response was not ok: ${errorText}`);
+            }
+
+            const result = await response.json();
+            console.log("Success:", result);
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+    const confirmBtns = document.querySelector('.add-friend');
+    const cancelBtns = document.querySelector('.cancel-request');
+    if (confirmBtns) {
+        confirmBtns.addEventListener('click', function(e) {
+            const data = { value:e.target.dataset.value, id: e.target.dataset.id };
+            console.log(data)
+            postJSON(data);
+            location.reload();  
+        });
+    }
+
+    if (cancelBtns) {
+        cancelBtns.addEventListener('click', function(e) {
+            const data = { id: e.target.dataset.id, value:e.target.dataset.value};
+            postJSON(data);
+            location.reload();
+        });
+    }
+});
+
+</script>
+
+{% endblock %}

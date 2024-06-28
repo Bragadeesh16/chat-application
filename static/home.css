@@ -1,0 +1,45 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px ;
+    border-bottom: 1px solid black;
+    width: 100%;
+}
+.username {
+    margin: 0;
+    margin-right: 20px;
+}
+
+.icon-header-elements {
+    display: flex;
+    align-items: center;
+}
+
+.icon-header-elements img {
+    margin-left: 10px;
+}
+
+.section {
+    padding: 15px;
+}
+.friend-list-container {
+    width: 100%;
+}
+
+.friend-list-div {
+    border-bottom: 1px solid black;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.friend-list-div a {
+    display: block;
+    padding: 5%;
+    padding-left: 10%;
+    width: 100%;
+    box-sizing: border-box;
+    text-decoration: none; 
+    font-size: larger;
+}
+
