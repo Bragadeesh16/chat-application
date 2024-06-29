@@ -11,13 +11,11 @@
         
             {% if message.sender.id == request.user.id %}
                 <li class="message message-align-right">
-                    <!-- <span class="message-username">{{ message.sender.username }}:</span> -->
-                    <span class="message-text">{{ message.text }}</span>
+                    {{ message.text }}
                 </li>
             {% else %}
                 <li class="message message-align-left">
-                    <span class="message-username">{{ message.sender.username }}:</span>
-                    <span class="message-text">{{ message.text }}</span>
+                    {{ message.text }}
                 </li>
             {% endif %}
         {% endfor %}
@@ -45,14 +43,21 @@
         console.log('connection is open');
     }
     ws.onmessage = function(e){
-        console.log(e)
-        const ul = document.getElementById('message-list');
-        var li = document.createElement('li');
+        var new_ul = document.querySelector('.message-list');
         var data = JSON.parse(event.data)
-        li.append(document.createTextNode(
-            data.username + ':' + data.text
-        ));
-        ul.append(li);
+        var new_li = document.createElement('li')
+        new_li.classList.add('message')
+        if(data.username == '{{request.user.username|escapejs}}'){
+            new_li.classList.add('message-align-right');
+            new_li.innerText = data.text;
+        }else{
+            new_li.classList.add('message-align-left');
+            new_li.innerText = data.text;
+        }
+        
+        new_li.textContent = data.text;
+        new_ul.appendChild(new_li)
+       
     }
     
     ws.onerror = function(e){

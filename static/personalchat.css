@@ -1,5 +1,5 @@
 #message-form{
-    position:absolute;
+    position:fixed;
     bottom: 30px;
 }
 input {
@@ -50,7 +50,7 @@ ul{
     word-wrap: break-word;
 }
 .sender-username{
-    padding: 4% 3%;
     border-bottom:1px solid black ;
-    width: 100%;
+    width: 25%;
+    position: fixed;
 }

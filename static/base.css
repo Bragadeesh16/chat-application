@@ -7,6 +7,7 @@ body, html {
     justify-content: center;
     align-items: center;
     background-color: hsl(234, 29%, 20%);
+    
 ;
 }
 
@@ -21,4 +22,5 @@ body, html {
     border: 1px solid #ccc; 
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     background-color: #fff; 
+    overflow-y: scroll;
 }

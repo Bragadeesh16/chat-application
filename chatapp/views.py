@@ -1,4 +1,4 @@
-from django.shortcuts import render,get_object_or_404
+from django.shortcuts import render
 from django.http import JsonResponse
 from .models import *
 from .form import *
@@ -84,7 +84,6 @@ def UpdateProfile(request,pk):
         'profile_form': profile_form,
     } 
     return render(request, 'updateprofile.html', context)
-
 
 
 @login_required(login_url='login')
@@ -191,4 +190,4 @@ def PersonalChat(request,pk):
     Receiver = CustomUser.objects.get(id = pk)
     thread_id = Thread.objects.get_or_create_personal_thread(Sender,Receiver)
     messages = Message.objects.filter(thread=thread_id)
-    return render(request,'personalchat.html',{'messages':messages,'sender':Receiver}) 
+    return render(request,'personalchat.html',{'messages':messages,'sender':Receiver})
